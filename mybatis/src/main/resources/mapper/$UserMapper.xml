@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace一定要是接口的全名一定要-->
+<mapper namespace="com.wowo.day1.UserDao">
+    <!--id是接口中对应的方法名-->
+   <insert id="insertUser" parameterType="com.wowo.day1.UserDao">
+       insert into users(name,age,pwd) value(#{name},#{age},#{pwd})
+   </insert>
+
+    <select id="getUserById" parameterType="int" resultType="com.wowo.day1.UserDao">
+       select * from users where id = #{id}
+    </select>
+
+
+</mapper>

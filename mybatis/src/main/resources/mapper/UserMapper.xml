@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz">
+<insert id="insertUser" parameterType="com.wowo.day1.User">
+    insert into users(name,pwd,age) values(#{name},#{pwd},#{age})
+</insert>
+
+ <delete id="deleteUser" parameterType="int">
+     delete from users where id =#{id}
+ </delete>
+
+ <update id="updateUser" parameterType="com.wowo.day1.User">
+      update users set name =#{name},#{pwd},#{age}  where id =#{id}
+ </update>
+
+  <!--根据id查  -->
+    <select id="getUserById" parameterType="int" resultType="com.wowo.day1.User">
+        select * from users where id = #{id}
+    </select>
+
+    <!--查所有-List<User>-->
+    <select id="getAll" resultType="com.wowo.day1.User">
+    select * from users
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--设置属性文件-->
+    <properties resource="db.properties"></properties>
+    <!--定义类的别名-->
+    <typeAliases >
+        <typeAlias type="com.wowo.day2.Student" alias="stu"></typeAlias>
+        <typeAlias type="com.wowo.day2.Emp" alias="emp"></typeAlias>
+        <typeAlias type="com.wowo.day2.Dept" alias="dept"></typeAlias>
+        <!--定义包名-->
+        <package name="com.wowo.day2"></package>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${user}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--加入映射文件-->
+    <mappers>
+    <mapper resource="mapper/UserMapper.xml"></mapper>
+        <mapper resource="mapper/$UserMapper.xml"></mapper>
+        <mapper class="com.wowo.day1.UserDao2"></mapper>
+        <mapper resource="mapper/StudentMapper.xml"></mapper>
+        <mapper resource="mapper/DeptMapper.xml"></mapper>
+        <mapper resource="mapper/EmpMapper.xml"></mapper>
+    </mappers>
+</configuration>

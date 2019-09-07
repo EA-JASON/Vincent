@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wowo.day2.StudentDao">
+<insert id="insertStudent" parameterType="stu" useGeneratedKeys="true" keyProperty="id">
+   insert into student(id,name,sno,birthday,score) value(#{id},#{name},#{sno},#{birthday},#{score})
+</insert>
+
+  <select id="getStudentById" parameterType="int" resultType="stu">
+      select * from student where id = #{id}
+  </select>
+
+    <!--public List<Student> getStudentsByScoreBetween(int minScore,int maxScore);-->
+    <select id="getStudentsByScoreBetween" resultType="stu">
+        select * from student where score &gt; #{min} and score &lt; #{max}
+    </select>
+
+    <select id="getStudentsByScoreBetween2"  resultType="stu">
+        select * from student where score &gt; #{min} and score &lt; #{max}
+    </select>
+
+    <select id="getMapById" parameterType="int" resultType="hashmap">
+        select * from student where id = #{id}
+    </select>
+   <!--定义实体类的属性名与查询出对应的关系-->
+    <resultMap id="studentResultMap" type="stu">
+     <!--定义主键对应的属性名-->
+    <id property="id" column="id"></id>
+        <!--定义普通属性与列名的对应关系-->
+     <result property="sname" column="name"></result>
+      <result property="birthday" column="birthday"></result>
+       <result property="score" column="score"></result>
+        <result  property="sno" column="sno"></result>
+    </resultMap>
+
+
+</mapper>
