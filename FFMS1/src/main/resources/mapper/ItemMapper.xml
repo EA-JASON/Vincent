@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wowo.user.dao.ItemDao">
+    <sql id="selectItem">
+  select i1.id i1id,i1.type i1type,i1.name i1name,i1.pid i1pid,
+		   i2.id i2id,i2.type i2type,i2.name i2name,i2.pid i2pid,
+			 i3.id i3id,i3.type i3type,i3.name i3name,i3.pid i3pid
+        from items i1 left join items i2 on i1.pid = i2.id
+			  left join items i3 on i1.id =  i3.pid
+</sql>
+
+    <select id="getItemByPk" parameterType="int" resultMap="itemResultMap">
+        <include refid="selectItem"></include>
+        where i1.id=#{id}
+    </select>
+
+    <insert id="save" parameterType="item">
+    insert into items(type,name) values(#{type},#{name})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+     delete from items where id =#{id}
+    </delete>
+
+    <delete id="deleteItems" >
+        delete from items where id in
+        <foreach collection="array" item="item" index="index" open="("   close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getAll" resultType="item">
+        select * from items
+    </select>
+
+    <select id="getItemByType" resultType="item">
+        select * from items where type = #{type}
+    </select>
+
+    <update id="update" parameterType="item">
+      update items set type =#{type},name = #{name}  where id =#{id}
+    </update>
+    <resultMap id="itemResultMap" type="item">
+        <id property="id" column="i1id"></id>
+        <result property="name" column="i1name"></result>
+        <result property="type" column="i1type"></result>
+        <association property="pItem" javaType="item" column="i1pid" >
+            <id property="id" column="i2id"></id>
+            <result property="name" column="i2name"></result>
+            <result property="type" column="i2type"></result>
+        </association>
+        <collection property="sItems" ofType="item">
+            <id property="id" column="i3id"></id>
+            <result property="name" column="i3name"></result>
+            <result property="type" column="i3type"></result>
+        </collection>
+    </resultMap>
+</mapper>

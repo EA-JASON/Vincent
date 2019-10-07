@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--定义类的别名-->
+    <typeAliases>
+        <typeAlias type="com.wowo.user.entity.Item" alias="item"></typeAlias>
+        <typeAlias type="com.wowo.user.entity.Account" alias="account"></typeAlias>
+        <package name="com.wowo.user.entity"></package>
+    </typeAliases>
+    <!--加入映射文件-->
+
+    <!-- 注册分页插件  -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
+
+    <mappers>
+        <mapper resource="mapper/AccountMapper.xml"/>
+        <mapper resource="mapper/ItemMapper.xml"/>
+        <mapper resource="mapper/UserMapper.xml"/>
+    </mappers>
+
+</configuration>

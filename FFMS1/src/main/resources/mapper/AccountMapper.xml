@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wowo.user.dao.AccountDao">
+    <sql id="selectAccount">
+     SELECT a.id,a.adate,a.amount,a.remark,a.user_id,a.item_id,
+u.id uid,u.name uname,u.realname urealname,u.pwd upwd,
+i.id iid,i.type itype,i.name iname,i.pid ipid
+FROM accounts a left JOIN users u on a.user_id=u.id
+LEFT JOIN items i on a.item_id=i.id
+    </sql>
+
+    <select id="getAccountByPK" parameterType="int" resultMap="accountResultMap">
+        <include refid="selectAccount"></include>
+        where a.id=#{id}
+    </select>
+
+    <insert id="save" parameterType="account">
+    insert into accounts(adate,amount,user_id,item_id) values(#{adate},#{amount},#{user_id},#{item_id})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+     delete from accounts where id =#{id}
+    </delete>
+
+    <delete id="deleteAccounts" >
+        delete from accounts where id in
+        <foreach collection="array" item="item" index="index" open="("   close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getAll" resultMap="accountResultMap">
+        <include refid="selectAccount"></include>
+    </select>
+
+    <update id="update" parameterType="account">
+    update accounts set amount = #{amount},adate = #{adate},user_id = #{user_id},item_id = #{item_id}  where id =#{id}
+</update>
+
+    <select id="getPagesAccounts" resultType="account">
+        SELECT * FROM accounts
+          LIMIT #{pageNum},#{pageSize};
+    </select>
+
+    <select id="getPagesAccountsByDate" resultMap="accountResultMap">
+        <include refid="selectAccount"></include>
+    WHERE adate BETWEEN #{begDate} AND #{endDate}
+        LIMIT #{pageNum},#{pageSize};
+    </select>
+
+    <resultMap id="accountResultMap" type="account">
+        <id property="id" column="id"></id>
+        <result property="adate" column="adate"></result>
+        <result property="amount" column="amount"></result>
+        <result property="remark" column="remark"></result>
+        <association property="user" javaType="com.wowo.user.entity.User" column="user_id">
+            <id property="id" column="uid"></id>
+            <result property="name" column="uname"></result>
+            <result property="realname" column="urealname"></result>
+            <result property="pwd" column="upwd"></result>
+        </association>
+        <association property="item" javaType="item" column="item_id">
+            <id property="id" column="iid"></id>
+            <result property="type" column="itype"></result>
+            <result property="name" column="iname"></result>
+        </association>
+    </resultMap>
+</mapper>

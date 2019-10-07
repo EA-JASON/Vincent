@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wowo.user.dao.UserDao">
+<select id="getUserByPK" parameterType="int" resultType="com.wowo.user.entity.User">
+ select * from users where id = #{id}
+</select>
+
+    <delete id="delete" parameterType="int">
+     delete from users where id =#{id}
+ </delete>
+
+    <delete id="deleteUsers" >
+      delete from users where id in
+      <foreach collection="array" item="item" index="index" open="("   close=")" separator=",">
+      #{item}
+      </foreach>
+    </delete>
+
+    <insert id="save" parameterType="com.wowo.user.entity.User">
+    insert into users(name,realname,pwd) values(#{name},#{realname},#{pwd})
+    </insert>
+
+    <select id="getAll" resultType="com.wowo.user.entity.User">
+        select * from users
+    </select>
+
+    <select id="canLogin" parameterType="String" resultType="com.wowo.user.entity.User">
+        select * from users where name = #{name} and pwd=#{pwd}
+    </select>
+
+    <update id="update" parameterType="com.wowo.user.entity.User">
+      update users set realname =#{realname},name = #{name},pwd = #{pwd}  where id =#{id}
+    </update>
+</mapper>

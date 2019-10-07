@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 加入tx的命名空间 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--<context:component-scan base-package="com.wowo.Service"></context:component-scan>-->
+    <!--定义属性文件的位置 一定要找到 不然报错-->
+    <context:property-placeholder location="classpath*:datasource.properties"></context:property-placeholder>
+    <!--创建ComboPooledDateSource对象-->
+    <bean id="dataSourse" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!--注入值,JDBC的4大参数,驱动程序的类名，url,用户名，密码-->
+        <property name="jdbcUrl" value="${db.url}"></property>
+        <property name="driverClass" value="${db.driverClassName}"></property>
+        <property name="user" value="${db.username}"></property>
+        <property name="password" value="${db.password}"></property>
+        <!--连接池的其他参数-->
+
+    </bean>
+    <!--获得SqlsessionFactory对象-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSourse"></property>
+        <!--mybatis配置文件的位置-->
+        <property name="configLocation" value="classpath:mybatis_conf.xml"></property>
+    </bean>
+
+    <!-- 配置事务管理器 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 注入DataSource -->
+        <property name="dataSource" ref="dataSourse"></property>
+    </bean>
+
+    <!-- 使用注解完成事务管理 -->
+    <tx:annotation-driven transaction-manager="txManager"></tx:annotation-driven>
+    <!--注入UserDao获得UserDao对象-->
+    <bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <!--注入SqlSessionFactory对象: sqlSession.getMapper() -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+        <!-- 主入接口名 -->
+        <property name="mapperInterface" value="com.wowo.user.dao.UserDao"></property>
+    </bean>
+
+    <bean id="accountDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <!--注入SqlSessionFactory对象: sqlSession.getMapper() -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+        <!-- 主入接口名 -->
+        <property name="mapperInterface" value="com.wowo.user.dao.AccountDao"></property>
+    </bean>
+
+    <bean id="itemDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <!--注入SqlSessionFactory对象: sqlSession.getMapper() -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+        <!-- 主入接口名 -->
+        <property name="mapperInterface" value="com.wowo.user.dao.ItemDao"></property>
+    </bean>
+
+    <context:component-scan base-package="com.wowo.user"/>
+    <!--<bean id="usersevice2" class="com.wowo.Service.UserService2">-->
+    <!--<property name="userDao" ref="userDao"></property>-->
+    <!--</bean>-->
+</beans>
